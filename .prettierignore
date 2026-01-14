@@ -1,0 +1,16 @@
+# Ignore artifacts:
+node_modules
+.next
+out
+build
+dist
+
+# Ignore PWA files
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
+
+# Ignore package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
