@@ -1,0 +1,70 @@
+{
+  "registrations": [
+    {
+      "id": 1,
+      "spotId": 2,
+      "spotName": "V-2",
+      "torre": "1",
+      "piso": "2",
+      "apto": "204",
+      "tipoVehiculo": "CARRO",
+      "placa": "KLO-888",
+      "fechaEntrada": "2026-01-14T08:30:00-05:00",
+      "fechaRetiro": null
+    },
+    {
+      "id": 2,
+      "spotId": 6,
+      "spotName": "V-6",
+      "torre": "2",
+      "piso": "3",
+      "apto": "305",
+      "tipoVehiculo": "MOTO",
+      "placa": "MNO-444",
+      "fechaEntrada": "2026-01-14T11:30:00-05:00",
+      "fechaRetiro": null
+    },
+    {
+      "id": 3,
+      "spotId": 15,
+      "spotName": "V-15",
+      "torre": "3",
+      "piso": "1",
+      "apto": "102",
+      "tipoVehiculo": "CARRO",
+      "placa": "ABC-123",
+      "fechaEntrada": "2026-01-13T14:00:00-05:00",
+      "fechaRetiro": "2026-01-13T18:30:00-05:00"
+    },
+    {
+      "id": 4,
+      "spotId": 8,
+      "spotName": "V-8",
+      "torre": "1",
+      "piso": "4",
+      "apto": "401",
+      "tipoVehiculo": "MOTO",
+      "placa": "XYZ-45A",
+      "fechaEntrada": "2026-01-12T09:15:00-05:00",
+      "fechaRetiro": "2026-01-12T12:00:00-05:00"
+    },
+    {
+      "id": 5,
+      "spotId": 22,
+      "spotName": "V-22",
+      "torre": "4",
+      "piso": "2",
+      "apto": "203",
+      "tipoVehiculo": "CARRO",
+      "placa": "DEF-456",
+      "fechaEntrada": "2026-01-11T16:45:00-05:00",
+      "fechaRetiro": "2026-01-11T20:15:00-05:00"
+    }
+  ],
+  "metadata": {
+    "totalRegistrations": 5,
+    "activeRegistrations": 2,
+    "completedRegistrations": 3,
+    "lastUpdated": "2026-01-14T15:30:00-05:00"
+  }
+}
