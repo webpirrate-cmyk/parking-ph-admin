@@ -1,0 +1,238 @@
+{
+  "owners": [
+    {
+      "id": "owner-001",
+      "name": "Juan Pérez",
+      "email": "juan.perez@email.com",
+      "phone": "+57 300 123 4567",
+      "apartments": [
+        {
+          "tower": "1",
+          "floor": "1",
+          "number": "101",
+          "parkingSpots": [
+            {
+              "code": "P-001",
+              "type": "PROPIO",
+              "maxVehicles": {
+                "cars": 1,
+                "motorcycles": 2
+              },
+              "vehicles": [
+                {
+                  "plate": "ABC-123",
+                  "type": "CARRO",
+                  "brand": "Toyota",
+                  "model": "Corolla",
+                  "color": "Blanco",
+                  "year": 2022
+                },
+                {
+                  "plate": "XYZ-45A",
+                  "type": "MOTO",
+                  "brand": "Yamaha",
+                  "model": "FZ",
+                  "color": "Negro",
+                  "year": 2021
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owner-002",
+      "name": "María García",
+      "email": "maria.garcia@email.com",
+      "phone": "+57 301 234 5678",
+      "apartments": [
+        {
+          "tower": "2",
+          "floor": "2",
+          "number": "204",
+          "parkingSpots": [
+            {
+              "code": "P-045",
+              "type": "PROPIO",
+              "maxVehicles": {
+                "cars": 1,
+                "motorcycles": 2
+              },
+              "vehicles": [
+                {
+                  "plate": "DEF-456",
+                  "type": "CARRO",
+                  "brand": "Mazda",
+                  "model": "CX-5",
+                  "color": "Rojo",
+                  "year": 2023
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owner-003",
+      "name": "Carlos Rodríguez",
+      "email": "carlos.rodriguez@email.com",
+      "phone": "+57 302 345 6789",
+      "apartments": [
+        {
+          "tower": "3",
+          "floor": "3",
+          "number": "305",
+          "parkingSpots": [
+            {
+              "code": "P-089",
+              "type": "PROPIO",
+              "maxVehicles": {
+                "cars": 0,
+                "motorcycles": 3
+              },
+              "vehicles": [
+                {
+                  "plate": "MTX-85L",
+                  "type": "MOTO",
+                  "brand": "Honda",
+                  "model": "CB190",
+                  "color": "Azul",
+                  "year": 2020
+                },
+                {
+                  "plate": "KLM-12N",
+                  "type": "MOTO",
+                  "brand": "Suzuki",
+                  "model": "GN125",
+                  "color": "Verde",
+                  "year": 2019
+                },
+                {
+                  "plate": "RST-67P",
+                  "type": "MOTO",
+                  "brand": "Kawasaki",
+                  "model": "Ninja",
+                  "color": "Negro",
+                  "year": 2022
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owner-004",
+      "name": "Ana Martínez",
+      "email": "ana.martinez@email.com",
+      "phone": "+57 303 456 7890",
+      "apartments": [
+        {
+          "tower": "1",
+          "floor": "1",
+          "number": "102",
+          "parkingSpots": [
+            {
+              "code": "P-002",
+              "type": "PROPIO",
+              "maxVehicles": {
+                "cars": 1,
+                "motorcycles": 2
+              },
+              "vehicles": [
+                {
+                  "plate": "GHI-789",
+                  "type": "CARRO",
+                  "brand": "Chevrolet",
+                  "model": "Spark",
+                  "color": "Gris",
+                  "year": 2021
+                },
+                {
+                  "plate": "UVW-23B",
+                  "type": "MOTO",
+                  "brand": "Bajaj",
+                  "model": "Pulsar",
+                  "color": "Rojo",
+                  "year": 2020
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tower": "1",
+          "floor": "1",
+          "number": "103",
+          "parkingSpots": [
+            {
+              "code": "P-003",
+              "type": "PROPIO",
+              "maxVehicles": {
+                "cars": 1,
+                "motorcycles": 2
+              },
+              "vehicles": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "owner-005",
+      "name": "Luis Fernández",
+      "email": "luis.fernandez@email.com",
+      "phone": "+57 304 567 8901",
+      "apartments": [
+        {
+          "tower": "4",
+          "floor": "4",
+          "number": "401",
+          "parkingSpots": [
+            {
+              "code": "P-120",
+              "type": "PROPIO",
+              "maxVehicles": {
+                "cars": 1,
+                "motorcycles": 2
+              },
+              "vehicles": [
+                {
+                  "plate": "JKL-012",
+                  "type": "CARRO",
+                  "brand": "Renault",
+                  "model": "Logan",
+                  "color": "Blanco",
+                  "year": 2022
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "totalOwners": 5,
+    "totalApartments": 6,
+    "totalParkingSpots": 6,
+    "totalVehicles": 10,
+    "lastUpdated": "2026-01-14T14:08:00Z",
+    "rules": {
+      "maxVehiclesPerSpot": {
+        "option1": {
+          "cars": 1,
+          "motorcycles": 2,
+          "description": "1 carro + 2 motos"
+        },
+        "option2": {
+          "cars": 0,
+          "motorcycles": 3,
+          "description": "3 motos"
+        }
+      }
+    }
+  }
+}

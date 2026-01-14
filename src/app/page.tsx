@@ -1,15 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { AdminLayout } from "@/components/layout";
 
 export default function Home() {
   const { data: session, status } = useSession();
+  
+  // ✅ TODOS LOS HOOKS AL PRINCIPIO
   const [currentView, setCurrentView] = useState<"search" | "visitors">("search");
   const [searchVehicleType, setSearchVehicleType] = useState<"CARRO" | "MOTO">("CARRO");
-  const [visitVehicleType, setVisitVehicleType] = useState<"CARRO" | "MOTO">("CARRO");
+  const [visitVehicleType, setVisitVehicleType] = useState<"CARRO" | "MOTO">("MOTO");
+  const [searchPlateValue, setSearchPlateValue] = useState("");
+  const [visitPlateValue, setVisitPlateValue] = useState("");
+  const [searchPlateValid, setSearchPlateValid] = useState<boolean | null>(null);
+  const [visitPlateValid, setVisitPlateValid] = useState<boolean | null>(null);
+
+  // Validación de placas
+  const handlePlateInput = useCallback(
+    (
+      value: string,
+      type: "CARRO" | "MOTO",
+      setter: (val: string) => void,
+      validSetter: (val: boolean | null) => void
+    ) => {
+      // 1. Obtener caracteres alfanuméricos solamente
+      let raw = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+      // 2. Limitar longitud máxima (6 caracteres)
+      if (raw.length > 6) raw = raw.slice(0, 6);
+
+      // 3. Construir valor con guion
+      let formattedValue = "";
+      if (raw.length > 3) {
+        formattedValue = raw.slice(0, 3) + "-" + raw.slice(3);
+      } else {
+        formattedValue = raw;
+      }
+
+      // 4. Asignar valor formateado
+      setter(formattedValue);
+
+      // 5. Validar según tipo de vehículo
+      let isValid: boolean | null = null;
+
+      if (formattedValue.length > 0) {
+        if (type === "CARRO") {
+          // 3 Letras, Guion, 3 Números
+          const carRegex = /^[A-Z]{3}-[0-9]{3}$/;
+          isValid = carRegex.test(formattedValue);
+        } else {
+          // 3 Letras, Guion, 2 Números, 1 Letra
+          const motoRegex = /^[A-Z]{3}-[0-9]{2}[A-Z]$/;
+          isValid = motoRegex.test(formattedValue);
+        }
+      }
+
+      validSetter(isValid);
+    },
+    []
+  );
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -18,6 +69,7 @@ export default function Home() {
     }
   }, [status]);
 
+  // ✅ CONDITIONAL RETURNS DESPUÉS DE TODOS LOS HOOKS
   if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -33,58 +85,12 @@ export default function Home() {
     return null;
   }
 
+  // ✅ FUNCIONES HELPER DESPUÉS DE RETURNS (NO SON HOOKS)
   // Formato dinámico según tipo de vehículo
   const getPlateFormat = (type: "CARRO" | "MOTO") => {
     return type === "CARRO"
       ? { placeholder: "ABC-123", hint: "Formato: ABC-123 (3 letras - 3 números)" }
       : { placeholder: "ABC-12D", hint: "Formato: ABC-12D (3 letras - 2 números - 1 letra)" };
-  };
-
-  // Validación de placas
-  const [searchPlateValue, setSearchPlateValue] = useState("");
-  const [visitPlateValue, setVisitPlateValue] = useState("");
-  const [searchPlateValid, setSearchPlateValid] = useState<boolean | null>(null);
-  const [visitPlateValid, setVisitPlateValid] = useState<boolean | null>(null);
-
-  const handlePlateInput = (
-    value: string,
-    type: "CARRO" | "MOTO",
-    setter: (val: string) => void,
-    validSetter: (val: boolean | null) => void
-  ) => {
-    // 1. Obtener caracteres alfanuméricos solamente
-    let raw = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-
-    // 2. Limitar longitud máxima (6 caracteres)
-    if (raw.length > 6) raw = raw.slice(0, 6);
-
-    // 3. Construir valor con guion
-    let formattedValue = "";
-    if (raw.length > 3) {
-      formattedValue = raw.slice(0, 3) + "-" + raw.slice(3);
-    } else {
-      formattedValue = raw;
-    }
-
-    // 4. Asignar valor formateado
-    setter(formattedValue);
-
-    // 5. Validar según tipo de vehículo
-    let isValid: boolean | null = null;
-
-    if (formattedValue.length > 0) {
-      if (type === "CARRO") {
-        // 3 Letras, Guion, 3 Números
-        const carRegex = /^[A-Z]{3}-[0-9]{3}$/;
-        isValid = carRegex.test(formattedValue);
-      } else {
-        // 3 Letras, Guion, 2 Números, 1 Letra
-        const motoRegex = /^[A-Z]{3}-[0-9]{2}[A-Z]$/;
-        isValid = motoRegex.test(formattedValue);
-      }
-    }
-
-    validSetter(isValid);
   };
 
   // Función para obtener clases de validación
@@ -97,19 +103,6 @@ export default function Home() {
       return `${baseClasses} border-red-500 text-red-600`;
     }
   };
-
-  // Revalidar cuando cambia el tipo de vehículo
-  useEffect(() => {
-    if (searchPlateValue) {
-      handlePlateInput(searchPlateValue, searchVehicleType, setSearchPlateValue, setSearchPlateValid);
-    }
-  }, [searchVehicleType]);
-
-  useEffect(() => {
-    if (visitPlateValue) {
-      handlePlateInput(visitPlateValue, visitVehicleType, setVisitPlateValue, setVisitPlateValid);
-    }
-  }, [visitVehicleType]);
 
   return (
     <AdminLayout
@@ -202,24 +195,37 @@ export default function Home() {
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               {/* Torre */}
               <div>
                 <label className="text-xs font-bold text-gray-500 mb-1 block">TORRE</label>
-                <select className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-center focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-lg">
+                <select className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-center focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-lg text-gray-800">
                   <option value="">---</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
                 </select>
+              </div>
+
+              {/* Piso */}
+              <div>
+                <label className="text-xs font-bold text-gray-500 mb-1 block">PISO</label>
+                <input
+                  type="number"
+                  placeholder="Ej: 2"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-center focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-lg placeholder-gray-400 text-gray-800"
+                />
               </div>
 
               {/* Apto */}
               <div>
-                <label className="text-xs font-bold text-gray-500 mb-1 block">APTO DESTINO</label>
+                <label className="text-xs font-bold text-gray-500 mb-1 block">APTO</label>
                 <input
                   type="number"
-                  placeholder="Ej: 204"
+                  placeholder="204"
                   className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-center focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-lg placeholder-gray-400 text-gray-800"
                 />
               </div>
