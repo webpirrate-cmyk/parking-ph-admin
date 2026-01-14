@@ -1,11 +1,40 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
+import Credentials from "next-auth/providers/credentials";
+import mockUsers from "@/mocks/users.json";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
-    Google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    Credentials({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        // Find user in mock data
+        const user = mockUsers.users.find(
+          (u) =>
+            u.email === credentials.email &&
+            u.password === credentials.password &&
+            u.status === "ACTIVE"
+        );
+
+        if (user) {
+          // Return user without password
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          };
+        }
+
+        return null;
+      },
     }),
   ],
   pages: {
@@ -13,16 +42,21 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async session({ session, token }) {
-      if (token?.sub) {
-        session.user.id = token.sub;
+      if (token) {
+        session.user.id = token.sub as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token.sub = user.id;
+        token.role = user.role;
       }
       return token;
     },
+  },
+  session: {
+    strategy: "jwt",
   },
 });

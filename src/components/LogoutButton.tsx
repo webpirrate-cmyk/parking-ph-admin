@@ -9,10 +9,7 @@ export default function LogoutButton() {
   };
 
   return (
-    <Button
-      onClick={handleLogout}
-      className="w-full bg-red-600 hover:bg-red-700 text-white"
-    >
+    <Button onClick={handleLogout} className="w-full bg-red-600 hover:bg-red-700 text-white">
       Cerrar Sesión
     </Button>
   );

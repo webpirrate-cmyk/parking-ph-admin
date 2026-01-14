@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@parking.com",
+      "password": "admin123",
+      "role": "ADMIN",
+      "name": "Administrador Principal",
+      "status": "ACTIVE",
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "email": "guardia1@parking.com",
+      "password": "guard123",
+      "role": "GUARD",
+      "name": "Juan Pérez",
+      "status": "ACTIVE",
+      "shift": "MORNING",
+      "createdAt": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "email": "guardia2@parking.com",
+      "password": "guard123",
+      "role": "GUARD",
+      "name": "María González",
+      "status": "ACTIVE",
+      "shift": "AFTERNOON",
+      "createdAt": "2026-01-05T00:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "email": "guardia3@parking.com",
+      "password": "guard123",
+      "role": "GUARD",
+      "name": "Carlos Ramírez",
+      "status": "ACTIVE",
+      "shift": "NIGHT",
+      "createdAt": "2026-01-05T00:00:00.000Z"
+    }
+  ]
+}

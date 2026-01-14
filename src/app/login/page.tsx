@@ -2,47 +2,39 @@
 
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
-
-// Google Icon SVG Component
-const GoogleIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path
-      d="M19.6 10.227c0-.709-.064-1.39-.182-2.045H10v3.868h5.382a4.6 4.6 0 01-1.996 3.018v2.51h3.232c1.891-1.742 2.982-4.305 2.982-7.35z"
-      fill="#4285F4"
-    />
-    <path
-      d="M10 20c2.7 0 4.964-.895 6.618-2.423l-3.232-2.509c-.895.6-2.04.955-3.386.955-2.605 0-4.81-1.76-5.595-4.123H1.064v2.59A9.996 9.996 0 0010 20z"
-      fill="#34A853"
-    />
-    <path
-      d="M4.405 11.9c-.2-.6-.314-1.24-.314-1.9 0-.66.114-1.3.314-1.9V5.51H1.064A9.996 9.996 0 000 10c0 1.614.386 3.14 1.064 4.49l3.34-2.59z"
-      fill="#FBBC05"
-    />
-    <path
-      d="M10 3.977c1.468 0 2.786.505 3.823 1.496l2.868-2.868C14.959.99 12.695 0 10 0 6.09 0 2.71 2.24 1.064 5.51l3.34 2.59C5.19 5.736 7.395 3.977 10 3.977z"
-      fill="#EA4335"
-    />
-  </svg>
-);
+import { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleGoogleSignIn = async () => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+
     try {
       setIsLoading(true);
-      await signIn("google", { callbackUrl: "/" });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError("Credenciales inválidas. Verifica tu email y contraseña.");
+      } else if (result?.ok) {
+        router.push("/");
+        router.refresh();
+      }
     } catch (error) {
       console.error("Error signing in:", error);
+      setError("Ocurrió un error al iniciar sesión. Intenta nuevamente.");
     } finally {
       setIsLoading(false);
     }
@@ -89,59 +81,88 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* Google Sign In Button */}
-            <Button
-              onClick={handleGoogleSignIn}
-              disabled={isLoading}
-              className="group relative w-full overflow-hidden bg-white hover:bg-zinc-50 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white border-2 border-zinc-300 dark:border-zinc-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              aria-label="Iniciar sesión con Google"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              <span className="relative flex items-center justify-center gap-3">
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="animate-spin h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    <span className="font-semibold">Conectando...</span>
-                  </>
-                ) : (
-                  <>
-                    <GoogleIcon />
-                    <span className="font-semibold">Continuar con Google</span>
-                  </>
-                )}
-              </span>
-            </Button>
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="rounded-lg bg-red-50 dark:bg-red-950/30 p-4 border border-red-200 dark:border-red-900">
+                  <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+                </div>
+              )}
 
-            {/* Divider */}
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-zinc-300 dark:border-zinc-700" />
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
+                >
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="guardia@parking.com"
+                  required
+                  disabled={isLoading}
+                  className="w-full"
+                />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-white dark:bg-zinc-900 px-4 text-zinc-500 dark:text-zinc-400">
-                  Inicio de sesión seguro
+
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2"
+                >
+                  Contraseña
+                </label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  disabled={isLoading}
+                  className="w-full"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="group relative w-full overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                <span className="relative flex items-center justify-center gap-3">
+                  {isLoading ? (
+                    <>
+                      <svg
+                        className="animate-spin h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      <span className="font-semibold">Iniciando sesión...</span>
+                    </>
+                  ) : (
+                    <span className="font-semibold">Iniciar Sesión</span>
+                  )}
                 </span>
-              </div>
-            </div>
+              </Button>
+            </form>
 
             {/* Security Info */}
             <div className="flex items-start gap-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 p-4 border border-blue-200 dark:border-blue-900">
