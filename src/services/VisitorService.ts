@@ -20,7 +20,9 @@ const STORAGE_KEY = 'visitor_registrations';
 export class VisitorService {
   // Obtener todos los registros
   static getRegistrations(): VisitorRegistration[] {
-    if (typeof window === 'undefined') return visitorRegistrationsData.registrations;
+    if (typeof window === 'undefined') {
+      return visitorRegistrationsData.registrations as VisitorRegistration[];
+    }
     
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
@@ -28,8 +30,9 @@ export class VisitorService {
     }
     
     // Inicializar con datos del JSON
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(visitorRegistrationsData.registrations));
-    return visitorRegistrationsData.registrations;
+    const initialData = visitorRegistrationsData.registrations as VisitorRegistration[];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData));
+    return initialData;
   }
 
   // Obtener registros activos (sin fecha de retiro)
